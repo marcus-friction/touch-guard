@@ -1,0 +1,4 @@
+dist/*.zip
+dist/*.zip.sha256
+**/schemas/gschemas.compiled
+**/__pycache__/

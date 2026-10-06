@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.touch-guard"
+          path="/org/gnome/shell/extensions/touch-guard/">
+    <key name="guarded" type="b">
+      <default>false</default>
+      <summary>Guard the touchscreen</summary>
+      <description>
+        Whether to block touchscreen input in the current GNOME session.
+        This choice is restored when the extension starts after login.
+      </description>
+    </key>
+  </schema>
+</schemalist>

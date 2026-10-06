@@ -1,0 +1,10 @@
+{
+  "uuid": "touch-guard@marcus-friction.github.io",
+  "name": "Touch Guard",
+  "description": "Adds a Quick Settings toggle that temporarily blocks touchscreen input. The guarded choice is restored at the next login.",
+  "shell-version": ["50"],
+  "url": "https://github.com/marcus-friction/touch-guard",
+  "gettext-domain": "touch-guard@marcus-friction.github.io",
+  "settings-schema": "org.gnome.shell.extensions.touch-guard",
+  "session-modes": ["user", "unlock-dialog"]
+}
