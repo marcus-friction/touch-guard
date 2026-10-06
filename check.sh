@@ -8,6 +8,7 @@ bash -n "$project_dir/install.sh" "$project_dir/uninstall.sh"
 bash "$project_dir/tests/install.test.sh"
 node --check "$source_dir/extension.js"
 node --check "$source_dir/controller.js"
+node "$project_dir/tests/controller.test.js"
 python3 - "$source_dir/helper.py" <<'PY'
 import ast
 import sys

@@ -103,7 +103,7 @@ export class TouchController {
             this._active = false;
             this._pending = false;
             if (this._desired) {
-                if (this._closing) {
+                if (this._closing && !this._error) {
                     this._start();
                     return;
                 }
