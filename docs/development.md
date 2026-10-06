@@ -58,6 +58,11 @@ correctly classified or that its touch events stop in GNOME Shell and
 Wayland clients. That requires the physical checklist in
 [Releasing](releasing.md).
 
+CI package and release jobs use a repository-specific `do-dev` runner slot.
+This public repository does not run untrusted pull-request code on that
+self-hosted runner; the workflow triggers only on pushes to `main`, version
+tags, and manual dispatches by users with repository access.
+
 ## Project provenance
 
 The initial implementation was created with AI assistance for personal use.
