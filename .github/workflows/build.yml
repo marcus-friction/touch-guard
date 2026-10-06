@@ -44,6 +44,10 @@ jobs:
         with:
           name: touch-guard-${{ github.sha }}
           path: dist
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes gh
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}

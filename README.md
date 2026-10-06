@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml/badge.svg)](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml)
 
-[Download the alpha release](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.4)
+[Download the alpha release](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.5)
 · [Development builds](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml)
 
 Touch Guard adds a toggle to GNOME Quick Settings. When **Touch Guard** is
@@ -70,13 +70,13 @@ release, set `TOUCH_GUARD_VERSION`, for example:
 
 ```sh
 curl -fsSLO https://raw.githubusercontent.com/marcus-friction/touch-guard/main/install.sh
-TOUCH_GUARD_VERSION=v0.1.0-alpha.4 bash install.sh
+TOUCH_GUARD_VERSION=v0.1.0-alpha.5 bash install.sh
 ```
 
 ### Manual installation
 
 Download the ZIP and `.sha256` file from the
-[release page](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.4),
+[release page](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.5),
 then run in their directory:
 
 ```sh
