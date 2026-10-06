@@ -12,12 +12,13 @@ permissions:
 jobs:
   package:
     runs-on: [self-hosted, linux, x64, do-dev]
-    container: fedora:44
 
     steps:
       - uses: actions/checkout@v4
       - name: Install build dependencies
-        run: dnf install --assumeyes glib2 make nodejs python3 unzip zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libglib2.0-bin
       - name: Build and validate
         run: make package
       - name: Upload deliverables
