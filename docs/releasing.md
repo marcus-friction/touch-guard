@@ -20,7 +20,7 @@ published release, including prereleases.
 1. Run `make package` and verify the checksum from the `dist/` directory.
 2. Inspect the ZIP contents, especially `helper.py` and the polkit policy.
 3. Confirm the installer test covers the public prerelease URL.
-4. Publish a tag such as `v0.1.0-alpha.1`. Hardware evidence is not required
+4. Publish a new tag such as `v0.1.0-alpha.4`. Hardware evidence is not required
    for this alpha; disclose that it is unverified in the README and release
    notes.
 5. Confirm that the GitHub workflow succeeds and both files appear on the
@@ -57,11 +57,11 @@ untested GNOME version.
 ## Publish
 
 GNOME assigns its own internal extension version, so `metadata.json` has no
-`version` field. Git tags provide release versions. The initial tag is:
+`version` field. Git tags provide release versions. For a later alpha:
 
 ```sh
-git tag --annotate v0.1.0-alpha.1 --message "Touch Guard v0.1.0-alpha.1"
-git push origin v0.1.0-alpha.1
+git tag --annotate v0.1.0-alpha.4 --message "Touch Guard v0.1.0-alpha.4"
+git push origin v0.1.0-alpha.4
 ```
 
 If a release build fails, fix it and use a new tag rather than moving the

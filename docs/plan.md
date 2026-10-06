@@ -1,8 +1,9 @@
 # Amended release plan
 
 The first release was `v0.1.0-alpha.1`; `v0.1.0-alpha.2` fixes a helper error
-retry loop and is the release for the user's physical touchscreen test. Device
-evidence is **not** a prerequisite for these alphas.
+retry loop. `v0.1.0-alpha.3` also handles event-number reuse after reconnects
+and is the release for the user's physical touchscreen test. Device evidence
+is **not** a prerequisite for these alphas.
 
 1. Build the complete extension, device helper, installer, tests, and
    documentation using Lid Sentinel's repository structure and release flow.

@@ -48,15 +48,20 @@ def touchscreen_nodes():
         )):
             continue
         try:
-            nodes[path] = os.stat(path).st_rdev
+            device = os.stat(path)
+            # Event numbers and device numbers may be reused after hotplug.
+            nodes[path] = (device.st_dev, device.st_ino, device.st_rdev)
         except FileNotFoundError:
             continue
     return nodes
 
 
-def grab(path):
+def grab(path, expected_identity):
     fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | os.O_CLOEXEC)
     try:
+        device = os.fstat(fd)
+        if (device.st_dev, device.st_ino, device.st_rdev) != expected_identity:
+            raise OSError("input device changed during enumeration")
         fcntl.ioctl(fd, EVIOCGRAB, 1)
     except BaseException:
         os.close(fd)
@@ -69,21 +74,22 @@ def run():
         report("ERROR Touch Guard helper must run through pkexec")
         return 1
 
-    held = {}  # path -> (device number, file descriptor)
+    held = {}  # path -> (device identity, file descriptor)
     selector = selectors.DefaultSelector()
     selector.register(sys.stdin.buffer, selectors.EVENT_READ)
     announced = None
     try:
         while True:
             wanted = touchscreen_nodes()
-            for path, (device_number, fd) in list(held.items()):
-                if wanted.get(path) != device_number:
+            for path, (device_identity, fd) in list(held.items()):
+                if wanted.get(path) != device_identity:
                     os.close(fd)
                     del held[path]
 
-            for path, device_number in wanted.items():
+            for path, device_identity in wanted.items():
                 if path not in held:
-                    held[path] = (device_number, grab(path))
+                    held[path] = (device_identity,
+                                  grab(path, device_identity))
 
             state = ("READY", len(held)) if held else ("WAITING", 0)
             if state != announced:

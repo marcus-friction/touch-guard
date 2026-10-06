@@ -32,15 +32,30 @@ class HelperTests(unittest.TestCase):
 
         with mock.patch.object(helper.glob, "glob", return_value=list(properties)), \
                 mock.patch.object(helper.subprocess, "run", side_effect=udev_info), \
-                mock.patch.object(helper.os, "stat", return_value=SimpleNamespace(st_rdev=13)):
-            self.assertEqual(helper.touchscreen_nodes(), {"/dev/input/event1": 13})
+                mock.patch.object(helper.os, "stat", return_value=SimpleNamespace(
+                    st_dev=5, st_ino=21, st_rdev=13)):
+            self.assertEqual(helper.touchscreen_nodes(),
+                             {"/dev/input/event1": (5, 21, 13)})
 
     def test_failed_grab_closes_device(self):
         with mock.patch.object(helper.os, "open", return_value=42), \
+                mock.patch.object(helper.os, "fstat", return_value=SimpleNamespace(
+                    st_dev=5, st_ino=21, st_rdev=13)), \
                 mock.patch.object(helper.fcntl, "ioctl", side_effect=OSError("busy")), \
                 mock.patch.object(helper.os, "close") as close:
             with self.assertRaises(OSError):
-                helper.grab("/dev/input/event1")
+                helper.grab("/dev/input/event1", (5, 21, 13))
+            close.assert_called_once_with(42)
+
+    def test_changed_device_is_not_grabbed(self):
+        with mock.patch.object(helper.os, "open", return_value=42), \
+                mock.patch.object(helper.os, "fstat", return_value=SimpleNamespace(
+                    st_dev=5, st_ino=22, st_rdev=13)), \
+                mock.patch.object(helper.fcntl, "ioctl") as ioctl, \
+                mock.patch.object(helper.os, "close") as close:
+            with self.assertRaisesRegex(OSError, "changed during enumeration"):
+                helper.grab("/dev/input/event1", (5, 21, 13))
+            ioctl.assert_not_called()
             close.assert_called_once_with(42)
 
     def test_stdin_eof_releases_grab(self):
@@ -57,6 +72,23 @@ class HelperTests(unittest.TestCase):
             self.assertEqual(helper.run(), 0)
         self.assertIn("READY 1", output.getvalue())
         close.assert_called_once_with(42)
+
+    def test_reused_event_number_is_regrabbed(self):
+        selector = mock.Mock()
+        selector.select.side_effect = [[], [1]]
+        with mock.patch.object(helper.os, "geteuid", return_value=0), \
+                mock.patch.object(helper, "touchscreen_nodes", side_effect=[
+                    {"/dev/input/event1": (5, 21, 13)},
+                    {"/dev/input/event1": (5, 22, 13)},
+                ]), \
+                mock.patch.object(helper, "grab", side_effect=[42, 43]) as grab, \
+                mock.patch.object(helper.selectors, "DefaultSelector", return_value=selector), \
+                mock.patch.object(helper.os, "read", return_value=b""), \
+                mock.patch.object(helper.os, "close") as close, \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(helper.run(), 0)
+        self.assertEqual(grab.call_count, 2)
+        self.assertEqual([call.args[0] for call in close.call_args_list], [42, 43])
 
 
 if __name__ == "__main__":
