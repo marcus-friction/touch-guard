@@ -27,11 +27,7 @@ while [[ $# -gt 0 ]]; do
     fi
 done
 printf 'curl %s\n' "$url" >>"$MOCK_LOG"
-if [[ "$url" == *'/releases?per_page=10' ]]; then
-    printf '%s\n' '[{"tag_name":"v0.1.0-alpha.1","draft":false}]' >"$output"
-else
-    : >"$output"
-fi
+: >"$output"
 EOF
 
     cat >"$mock_bin/sha256sum" <<'EOF'
@@ -101,6 +97,7 @@ run_installer() {
         MOCK_ENABLED_EXTENSIONS="$3" \
         MOCK_DISABLED_EXTENSIONS="$4" \
         MOCK_INSTALLED_RESULT="$5" \
+        TOUCH_GUARD_VERSION="${6:-}" \
         XDG_DATA_HOME="$test_dir/data" \
         bash "$project_dir/install.sh" 2>&1
 }
@@ -110,13 +107,17 @@ write_mocks
 output=$(run_installer success success '@as []' '@as []' failure)
 assert_contains "$output" 'Touch Guard is installed and enabled.'
 assert_contains "$(<"$mock_log")" \
-    'releases/download/v0.1.0-alpha.1/touch-guard@marcus-friction.github.io.shell-extension.zip'
+    'releases/latest/download/touch-guard@marcus-friction.github.io.shell-extension.zip'
 assert_contains "$(<"$mock_log")" \
     'sudo install -D -m 0755'
 if grep -Fq 'gsettings' "$mock_log"; then
     printf 'Immediate enablement should not modify GNOME settings.\n' >&2
     exit 1
 fi
+
+output=$(run_installer success success '@as []' '@as []' failure v0.1.0-alpha.5)
+assert_contains "$(<"$mock_log")" \
+    'releases/download/v0.1.0-alpha.5/touch-guard@marcus-friction.github.io.shell-extension.zip'
 
 output=$(run_installer failure success \
     "['existing@example.org']" \

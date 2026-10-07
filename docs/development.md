@@ -47,7 +47,7 @@ make test-shell
 
 ## Test scope
 
-The installer tests cover prerelease selection, helper installation,
+The installer tests cover stable and pinned release downloads, helper installation,
 immediate enablement, next-login enablement, upgrade detection, and the
 fallback message. Helper tests cover touchscreen selection, failed-grab
 cleanup, and release on stdin EOF. The Shell smoke test covers creation,

@@ -2,16 +2,14 @@
 
 [![Build](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml/badge.svg)](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml)
 
-[Download the alpha release](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.5)
+[Download the latest release](https://github.com/marcus-friction/touch-guard/releases/latest/download/touch-guard@marcus-friction.github.io.shell-extension.zip)
+· [SHA-256 checksum](https://github.com/marcus-friction/touch-guard/releases/latest/download/touch-guard@marcus-friction.github.io.shell-extension.zip.sha256)
+· [All releases](https://github.com/marcus-friction/touch-guard/releases)
 · [Development builds](https://github.com/marcus-friction/touch-guard/actions/workflows/build.yml)
 
 Touch Guard adds a toggle to GNOME Quick Settings. When **Touch Guard** is
 selected, touchscreen input has no effect. Turning it off restores touch. The
 choice is saved and reapplied after login, including after a restart.
-
-> **Alpha release:** the package and automated tests have been checked, but
-> touchscreen behavior has not yet been tested on a physical laptop. This
-> release is for hardware testing; see [the test checklist](docs/releasing.md).
 
 ## What it does
 
@@ -34,9 +32,10 @@ an error.
 
 ## Compatibility and status
 
-This alpha release targets GNOME Shell 50 on Linux, including Fedora
-Workstation 44. Other GNOME versions are not claimed. A physical touchscreen
-test is still required before a stable release.
+Version 1.0.0 targets GNOME Shell 50 on Linux, including Fedora Workstation
+44. Other GNOME versions are not claimed. The first tester confirmed that
+installation and the core touchscreen toggle work on their laptop. Detailed
+lock, reconnect, and reboot results have not yet been reported.
 
 ## Install
 
@@ -46,7 +45,7 @@ From a terminal in your GNOME desktop session, run:
 curl -fsSL https://raw.githubusercontent.com/marcus-friction/touch-guard/main/install.sh | bash
 ```
 
-The installer selects the newest published release, downloads the extension
+The installer selects the latest stable release, downloads the extension
 ZIP and SHA-256 checksum, verifies the download, installs the root-owned
 device helper and its polkit policy with `sudo`, installs the extension for the
 current user, and enables it. The administrator prompt is needed during
@@ -70,13 +69,13 @@ release, set `TOUCH_GUARD_VERSION`, for example:
 
 ```sh
 curl -fsSLO https://raw.githubusercontent.com/marcus-friction/touch-guard/main/install.sh
-TOUCH_GUARD_VERSION=v0.1.0-alpha.5 bash install.sh
+TOUCH_GUARD_VERSION=v1.0.0 bash install.sh
 ```
 
 ### Manual installation
 
 Download the ZIP and `.sha256` file from the
-[release page](https://github.com/marcus-friction/touch-guard/releases/tag/v0.1.0-alpha.5),
+[release page](https://github.com/marcus-friction/touch-guard/releases/latest),
 then run in their directory:
 
 ```sh
@@ -149,7 +148,7 @@ make test-shell  # headless GNOME Shell lifecycle test; needs GNOME test tools
 
 See [Development](docs/development.md) for the architecture and test scope,
 [Releasing](docs/releasing.md) for the hardware checklist, and the
-[amended plan](docs/plan.md) for the alpha release criteria.
+[release history](docs/plan.md) for the path to version 1.0.0.
 
 The extension is not submitted to extensions.gnome.org. This project requires
 an external privileged helper; any future submission must be evaluated

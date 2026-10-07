@@ -73,25 +73,16 @@ trap 'rm -rf -- "$temporary_dir"' EXIT
 
 release_tag=${TOUCH_GUARD_VERSION:-}
 if [[ -z "$release_tag" ]]; then
-    curl --fail --location --retry 3 --show-error --silent \
-        --output "$temporary_dir/releases.json" \
-        "https://api.github.com/repos/$repository/releases?per_page=10"
-    release_tag=$(python3 - "$temporary_dir/releases.json" <<'PY'
-import json
-import sys
-
-with open(sys.argv[1], encoding='utf-8') as release_file:
-    releases = json.load(release_file)
-print(next((release['tag_name'] for release in releases
-            if not release['draft']), ''))
-PY
-    )
+    release_url="https://github.com/$repository/releases/latest/download"
+    release_label='the latest stable release'
+else
+    [[ "$release_tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]] ||
+        fail 'invalid TOUCH_GUARD_VERSION'
+    release_url="https://github.com/$repository/releases/download/$release_tag"
+    release_label="$release_tag"
 fi
-[[ "$release_tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]] ||
-    fail 'no valid GitHub release was found'
-release_url="https://github.com/$repository/releases/download/$release_tag"
 
-printf 'Downloading Touch Guard %s...\n' "$release_tag"
+printf 'Downloading Touch Guard %s...\n' "$release_label"
 curl --fail --location --retry 3 --show-error --silent \
     --output "$temporary_dir/$archive_name" \
     "$release_url/$archive_name"

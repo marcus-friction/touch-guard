@@ -12,21 +12,21 @@ dist/touch-guard@marcus-friction.github.io.shell-extension.zip
 dist/touch-guard@marcus-friction.github.io.shell-extension.zip.sha256
 ```
 
-The asset names remain stable across releases. `install.sh` selects the newest
-published release, including prereleases.
+The asset names remain stable across releases. `install.sh` selects GitHub's
+latest stable release by default. Set `TOUCH_GUARD_VERSION` to pin a specific
+tag, including a prerelease.
 
-## Alpha release checklist
+## Release checklist
 
 1. Run `make package` and verify the checksum from the `dist/` directory.
 2. Inspect the ZIP contents, especially `helper.py` and the polkit policy.
-3. Confirm the installer test covers the public prerelease URL.
-4. Publish a new tag such as `v0.1.0-alpha.6`. Hardware evidence is not required
-   for this alpha; disclose that it is unverified in the README and release
-   notes.
+3. Confirm the installer test covers the stable download URL and a pinned tag.
+4. Publish a new version tag. Disclose which hardware checks have and have not
+   been reported in the release notes.
 5. Confirm that the GitHub workflow succeeds and both files appear on the
    release page.
 
-## Physical test checklist for the alpha
+## Physical test checklist
 
 Perform this on a GNOME Shell 50 Wayland laptop with a working keyboard and
 touchpad. Keep the laptop on a desk.
@@ -47,21 +47,21 @@ touchpad. Keep the laptop on a desk.
 9. Uninstall and confirm touch works. Record the GNOME Shell journal if any
    step fails.
 
-## Stable release gate
+## Version 1.0.0 validation
 
-Publish a stable tag only after the physical checklist passes on the claimed
-GNOME version and hardware, with any failures fixed in a new alpha. Document
-the tested laptop and GNOME version in the release notes. Do not claim an
-untested GNOME version.
+The first tester reported that installation and the core touchscreen toggle
+work on a laptop. The laptop model, GNOME version, and results for lock,
+reconnect, and reboot have not been recorded. Version 1.0.0 is promoted on
+that report; these additional checks remain open for future evidence.
 
 ## Publish
 
 GNOME assigns its own internal extension version, so `metadata.json` has no
-`version` field. Git tags provide release versions. For a later alpha:
+`version` field. Git tags provide release versions. For the stable promotion:
 
 ```sh
-git tag --annotate v0.1.0-alpha.6 --message "Touch Guard v0.1.0-alpha.6"
-git push origin v0.1.0-alpha.6
+git tag --annotate v1.0.0 --message "Touch Guard v1.0.0"
+git push origin v1.0.0
 ```
 
 If a release build fails, fix it and use a new tag rather than moving the
